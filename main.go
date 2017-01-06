@@ -13,7 +13,6 @@ import (
 	"image/gif"
 	"unicode/utf8"
 	"github.com/nsf/termbox-go"
-	"log"
 )
 
 var (
@@ -149,10 +148,7 @@ func draw(img *gif.GIF) {
 				switch ev.Type {
 				case termbox.EventKey :
 					if ev.Ch == 'q' || ev.Key == termbox.KeyEsc || ev.Key == termbox.KeyCtrlC || ev.Key == termbox.KeyCtrlD {
-						err := os.Remove(outputFile)
-						if err != nil {
-							log.Fatal("Cannot remove the generated GIF file.")
-						}
+						os.Remove(outputFile)
 						break loop
 					}
 				case termbox.EventResize :

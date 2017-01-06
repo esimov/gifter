@@ -17,9 +17,8 @@ import (
 )
 
 var (
-	gifImg		*GifImg
 	wg			sync.WaitGroup
-	loopCount	int		= 20
+	gifImg		*GifImg
 	terminal	*Terminal
 	termWidth  	int 	= Window.Width
 	termHeight 	int 	= Window.Height
@@ -29,6 +28,7 @@ var (
 	outputFile	string
 	background	string
 	unicode		string
+	delay		int
 
 	commands flag.FlagSet
 )
@@ -42,6 +42,7 @@ func main() {
 	commands.StringVar(&background, "background", "preserve", "Remove the background color from GIF file")
 	commands.StringVar(&outputFile, "file", "output.gif", "Create new GIF file with the background color removed")
 	commands.StringVar(&unicode, "character", "_", "Select unicode character as cell block")
+	commands.IntVar(&delay, "delay", 120, "Delay between frames")
 
 	if len(os.Args) <= 1 {
 		fmt.Println("Please provide a GIF image, or type --help for the supported command line arguments\n")
@@ -53,11 +54,13 @@ func main() {
 		fmt.Println(`
 Command line arguments:
 	-background string
-		Remove the background color from GIF file (default "preserve")
+		Remove background color from GIF image (default "preserve")
 	-file string
-		Create new GIF file with the background color removed (default "output.gif")
-	-unicode string
-		Select unicode character as cell block (default "_")
+		Export the new GIF file with the background color removed (default "output.gif")
+	-character string
+		Use character as cell block (default "_")
+	-delay int
+		Delay between frames (default 120)
 		`)
 		os.Exit(1)
 	}
@@ -124,7 +127,7 @@ func loadGif(fileName string) *gif.GIF {
 // Render gif on terminal window
 func draw(img *gif.GIF) {
 	var startX, startY, endX, endY int
-	ticker := time.Tick(time.Millisecond * 150)
+	ticker := time.Tick(time.Millisecond * time.Duration(delay))
 	imgWidth, imgHeight := img.Config.Width, img.Config.Height
 	scaleX, scaleY := gifImg.Scale(imgWidth, imgHeight, termWidth, termHeight, ratio)
 	dominantColor := gifImg.GetDominantColor(img)

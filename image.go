@@ -95,23 +95,14 @@ func (gifImg *GifImg) GetDominantColor(img *gif.GIF) color.RGBA {
 
 // Scale the generated image to fit between terminal width & height
 func (gifImg *GifImg) Scale(imgWidth, imgHeight, termWidth, termHeight int, ratio float64) (float64, float64) {
-	width := float64(imgWidth) / float64(termWidth)
+	width := float64(imgWidth) / (float64(termWidth) * ratio)
 	height := float64(imgHeight) / (float64(termHeight) * ratio)
 
-	/*fmt.Println(width)
-	fmt.Println(height)
-	fmt.Println(termWidth)
-	fmt.Println(termHeight)
-	fmt.Println(imgWidth)
-	fmt.Println(imgHeight)
-	os.Exit(1)*/
-	maxValX := maxValue(1, width, height)
-	maxValY := maxValue(2, width, height)
-
-	if float64(imgWidth) / float64(imgHeight) > width + height {
-		maxValY = maxValue(0, width, height)
+	// @TODO check for a workaround to avoid deadlock
+	if width < 1.0 || height < 1.0 { // if image aspect ratio is below 1
+		width, height = 1.0, 2.0
 	}
-	return maxValX, maxValY
+	return width, height
 }
 
 // Set terminal cell's dimension

@@ -39,9 +39,9 @@ func getTerminal() (*Terminal) {
 	if err != nil {
 		panic(err)
 	}
-	var whRatio float64 = 7.0 / 3.0 // The terminal's default cursor width/height ratio
+	var whRatio float64
 	if ws.Width > 0 && ws.Height > 0 {
-		whRatio = float64(ws.Height/ws.Rows) / float64(ws.Width/ws.Cols)
+		whRatio = float64(ws.Height / ws.Rows) / float64(ws.Width / ws.Cols) * 0.5
 	}
 	return &Terminal{
 		Width 	: int(ws.Cols),

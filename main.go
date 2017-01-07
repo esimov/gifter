@@ -138,8 +138,7 @@ func draw(img *gif.GIF) {
 		}
 	}()
 
-	// Resize canvas to fit scaled image
-	//width, height := int(float64(imgWidth)/scaleFactor), int(float64(imgHeight)/(scaleFactor * ratio))
+	// This where the magic happens
 	loop:
 	for {
 		for idx := 0; idx < len(img.Image); idx++ {

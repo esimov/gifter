@@ -40,7 +40,7 @@ func main() {
 	commands = *flag.NewFlagSet("commands", flag.ExitOnError)
 	commands.StringVar(&background, "background", "preserve", "Remove the background color from GIF file")
 	commands.StringVar(&outputFile, "file", "output.gif", "Create new GIF file with the background color removed")
-	commands.StringVar(&unicode, "character", "_", "Select unicode character as cell block")
+	commands.StringVar(&unicode, "character", "▄", "Select unicode character as cell block")
 	commands.IntVar(&delay, "delay", 120, "Delay between frames")
 
 	if len(os.Args) <= 1 {
@@ -175,7 +175,7 @@ func draw(img *gif.GIF) {
 							if commands.Parsed() {
 								termbox.SetCell(x, y, r, colorDown, colorUp)
 							} else {
-								termbox.SetCell(x, y, '_', colorDown, colorUp)
+								termbox.SetCell(x, y, '▄', colorDown, colorUp)
 							}
 						}
 					}

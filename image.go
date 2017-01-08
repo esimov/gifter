@@ -98,7 +98,7 @@ func (gifImg *GifImg) Scale(imgWidth, imgHeight, termWidth, termHeight int, rati
 	width := float64(imgWidth) / (float64(termWidth) * ratio)
 	height := float64(imgHeight) / (float64(termHeight) * ratio)
 
-	// @TODO check for a workaround to avoid deadlock
+	// Avoid deadlock
 	if width < 1.0 || height < 1.0 { // if image aspect ratio is below 1
 		width, height = 1.0, 2.0
 	}

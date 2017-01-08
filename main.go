@@ -13,6 +13,7 @@ import (
 	"image/gif"
 	"unicode/utf8"
 	"github.com/nsf/termbox-go"
+	"math"
 )
 
 var (
@@ -28,6 +29,7 @@ var (
 	background	string
 	unicode		string
 	delay		int
+	loop		uint64
 
 	commands flag.FlagSet
 )
@@ -42,6 +44,7 @@ func main() {
 	commands.StringVar(&outputFile, "file", "output.gif", "Create new GIF file with the background color removed")
 	commands.StringVar(&unicode, "character", "▄", "Select unicode character as cell block")
 	commands.IntVar(&delay, "delay", 120, "Delay between frames")
+	commands.Uint64Var(&loop, "loop", math.MaxUint64, "Loop count")
 
 	if len(os.Args) <= 1 {
 		fmt.Println("Please provide a GIF image, or type --help for the supported command line arguments\n")
@@ -60,6 +63,8 @@ Command line arguments:
 		Use character as cell block (default "_")
 	-delay int
 		Delay between frames (default 120)
+	-loop uint
+		Loop count (default MaxUint64)
 		`)
 		os.Exit(1)
 	}
@@ -126,6 +131,8 @@ func loadGif(fileName string) *gif.GIF {
 // Render gif on terminal window
 func draw(img *gif.GIF) {
 	var startX, startY, endX, endY int
+	var loopCount uint64
+
 	ticker := time.Tick(time.Millisecond * time.Duration(delay))
 	imgWidth, imgHeight := img.Config.Width, img.Config.Height
 	scaleX, scaleY := gifImg.Scale(imgWidth, imgHeight, termWidth, termHeight, ratio)
@@ -141,6 +148,10 @@ func draw(img *gif.GIF) {
 	// This where the magic happens
 	loop:
 	for {
+		if loopCount >= loop {
+			os.Remove(outputFile)
+			break loop
+		}
 		for idx := 0; idx < len(img.Image); idx++ {
 			select {
 			case ev := <-eventQueue:
@@ -185,5 +196,6 @@ func draw(img *gif.GIF) {
 			wg.Wait()
 			time.Sleep(10 * time.Millisecond)
 		}
+		loopCount++
 	}
 }

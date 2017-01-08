@@ -60,11 +60,11 @@ Command line arguments:
 	-file string
 		Export the new GIF file with the background color removed (default "output.gif")
 	-character string
-		Use character as cell block (default "_")
+		Use character as cell block (default "▄")
 	-delay int
 		Delay between frames (default 120)
 	-loop uint
-		Loop count (default MaxUint64)
+		Loop count (default 18446744073709551615)
 		`)
 		os.Exit(1)
 	}

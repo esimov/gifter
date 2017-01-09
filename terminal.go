@@ -21,6 +21,8 @@ type Terminal struct {
 	Ratio	float64
 }
 
+const defaultRatio float64 = 1.0 // The terminal's default cursor width/height ratio
+
 // Screen buffer
 var screen *bytes.Buffer = new(bytes.Buffer)
 var output *bufio.Writer = bufio.NewWriter(os.Stdout)
@@ -35,11 +37,12 @@ func init() {
 
 // Get terminal size
 func getTerminal() (*Terminal) {
+	var whRatio float64
 	ws, err := getWinsize()
 	if err != nil {
 		panic(err)
 	}
-	var whRatio float64
+	whRatio = defaultRatio
 	if ws.Width > 0 && ws.Height > 0 {
 		whRatio = float64(ws.Height / ws.Rows) / float64(ws.Width / ws.Cols) * 0.5
 	}

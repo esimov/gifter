@@ -21,6 +21,8 @@ But the more elegant and simpler way is to generate the binary file using `go in
 gifter <gif file>
 ```
 
+To terminate the gif animation press `<ESC>`, `CTRL-C`, `CTRL-D` or `q` key. You can even define the loop count in the `loop` parameter as `-loop=<count>`, the animation stopping after the provided iteration count.
+
 ### Supported commands:
 Type `gifter --help` for the supported commands:
 

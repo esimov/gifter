@@ -42,5 +42,4 @@ Command line arguments:
 _Note:_ there is a flickering issue playing non transparent background gif images. For this reason you can use the `background=remove` flag, which generates a new gif image with the most dominant color removed (which in most cases is the background color). But for the best visual experience it's advised to use gif files with transparent background. 
 
 ## Licence
-
-This experiment is under MIT License.
+This software is distributed under the MIT license found in the LICENSE file.

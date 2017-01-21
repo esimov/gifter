@@ -9,6 +9,11 @@ import (
 type GifImg struct {
 	gif.GIF
 }
+
+func NewGifImg(img *gif.GIF) *GifImg {
+	return &GifImg{*img}
+}
+
 // Load image
 func (gifImg *GifImg) Load(filename string) (*gif.GIF, error) {
 	file, err := os.Open(filename)

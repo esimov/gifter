@@ -27,7 +27,7 @@ var (
 	// Flags
 	outputFile	string
 	background	string
-	unicode		string
+	char		string
 	delay		int
 	loop		uint64
 
@@ -42,7 +42,7 @@ func main() {
 	commands = *flag.NewFlagSet("commands", flag.ExitOnError)
 	commands.StringVar(&background, "background", "preserve", "Remove the background color from GIF file")
 	commands.StringVar(&outputFile, "file", "output.gif", "Create new GIF file with the background color removed")
-	commands.StringVar(&unicode, "character", "▄", "Select unicode character as cell block")
+	commands.StringVar(&char, "char", "▄", "Used character as a cell block")
 	commands.IntVar(&delay, "delay", 120, "Delay between frames")
 	commands.Uint64Var(&loop, "loop", math.MaxUint64, "Loop count")
 
@@ -59,8 +59,8 @@ Command line arguments:
 		Remove background color from GIF image (default "preserve")
 	-file string
 		Export the new GIF file with the background color removed (default "output.gif")
-	-character string
-		Use character as cell block (default "▄")
+	-char string
+		Used character as a cell block (default "▄")
 	-delay int
 		Delay between frames (default 120)
 	-loop uint
@@ -182,7 +182,7 @@ func draw(img *gif.GIF) {
 							col = gifImg.CellAvgRGB(img, dominantColor, startX, (startY+endY)/2, endX, endY, idx)
 							colorDown := termbox.Attribute(col)
 
-							r, _ := utf8.DecodeRuneInString(unicode)
+							r, _ := utf8.DecodeRuneInString(char)
 							if commands.Parsed() {
 								termbox.SetCell(x, y, r, colorDown, colorUp)
 							} else {

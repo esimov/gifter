@@ -1,4 +1,5 @@
 <img width="90" alt="Gifter" src="https://cloud.githubusercontent.com/assets/883386/21749779/ef01be0c-d5ae-11e6-90d2-25d775286f60.png"/>
+
 #
 Gifter is a gif renderer running in the terminal. It takes a gif file as input and plays it directly in the terminal window. It's fully customziable by the supported command flags. Gifter is build on top of <a href="https://github.com/nsf/termbox-go">termbox-go</a>.
 <p align="center">

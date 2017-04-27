@@ -5,6 +5,7 @@ Gifter is a gif renderer running in the terminal. It takes a gif file as input a
 <p align="center">
 <img alt="Sample gif" src="https://raw.githubusercontent.com/esimov/gifter/master/capture.gif"/>
 </p>
+
 ### Install
 ```
 go get github.com/esimov/gifter

@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	wg			sync.WaitGroup
+	wg		sync.WaitGroup
 	gifImg		*GifImg
 	terminal	*Terminal
 	termWidth  	int 	= Window.Width
@@ -26,12 +26,12 @@ var (
 
 	// Flags
 	outputFile	string
-	background	string
-	unicode		string
-	delay		int
-	loop		uint64
+	blockCode 	string
+	removeBg 	bool
+	frameRates 	int
+	count		uint64
 
-	commands flag.FlagSet
+	commands 	flag.FlagSet
 )
 
 func main() {
@@ -40,11 +40,11 @@ func main() {
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 
 	commands = *flag.NewFlagSet("commands", flag.ExitOnError)
-	commands.StringVar(&background, "background", "preserve", "Remove the background color from GIF file")
-	commands.StringVar(&outputFile, "file", "output.gif", "Create new GIF file with the background color removed")
-	commands.StringVar(&unicode, "character", "▄", "Select unicode character as cell block")
-	commands.IntVar(&delay, "delay", 120, "Delay between frames")
-	commands.Uint64Var(&loop, "loop", math.MaxUint64, "Loop count")
+	commands.BoolVar(&removeBg, "removeBg", false, "Remove GIF file background color")
+	commands.StringVar(&outputFile, "output", "output.gif", "Create new GIF file with the background color removed")
+	commands.StringVar(&blockCode, "block", "▄", "Select unicode character as cell block")
+	commands.IntVar(&frameRates, "frame", 120, "Frame rates")
+	commands.Uint64Var(&count, "count", math.MaxUint64, "Loop count")
 
 	if len(os.Args) <= 1 {
 		fmt.Println("Please provide a GIF image, or type --help for the supported command line arguments\n")
@@ -54,24 +54,24 @@ func main() {
 
 	if (os.Args[1] == "--help" || os.Args[1] == "-h") {
 		fmt.Println(`
-Command line arguments:
-	-background string
-		Remove background color from GIF image (default "preserve")
-	-file string
-		Export the new GIF file with the background color removed (default "output.gif")
-	-character string
-		Use character as cell block (default "▄")
-	-delay int
-		Delay between frames (default 120)
-	-loop uint
-		Loop count (default 18446744073709551615)
+Usage of commands:
+  -block string
+    	Select unicode character as cell block (default "▄")
+  -count uint
+    	Loop count (default 18446744073709551615)
+  -frame int
+    	Frame rates (default 120)
+  -output string
+    	Create new GIF file with the background color removed (default "output.gif")
+  -removeBg
+    	Remove GIF file background color
 		`)
 		os.Exit(1)
 	}
 
 	commands.Parse(os.Args[2:])
 	terminal = &Terminal{}
-	terminal.Flush()
+	//terminal.Flush()
 
 	img := loadGif(os.Args[1])
 	gifImg = &GifImg{}
@@ -84,7 +84,7 @@ Command line arguments:
 	defer termbox.Close()
 	termbox.SetOutputMode(termbox.Output256)
 
-	if commands.Parsed() && background == "remove" {
+	if commands.Parsed() && removeBg {
 		dominantColor := gifImg.GetDominantColor(img)
 		for idx := 0; idx < len(img.Image); idx++ {
 			for x := 0; x < img.Config.Width; x++ {
@@ -133,7 +133,7 @@ func draw(img *gif.GIF) {
 	var startX, startY, endX, endY int
 	var loopCount uint64
 
-	ticker := time.Tick(time.Millisecond * time.Duration(delay))
+	ticker := time.Tick(time.Millisecond * time.Duration(frameRates))
 	imgWidth, imgHeight := img.Config.Width, img.Config.Height
 	scaleX, scaleY := gifImg.Scale(imgWidth, imgHeight, termWidth, termHeight, ratio)
 	dominantColor := gifImg.GetDominantColor(img)
@@ -148,7 +148,7 @@ func draw(img *gif.GIF) {
 	// This where the magic happens
 	loop:
 	for {
-		if loopCount >= loop {
+		if loopCount >= count {
 			os.Remove(outputFile)
 			break loop
 		}
@@ -182,7 +182,7 @@ func draw(img *gif.GIF) {
 							col = gifImg.CellAvgRGB(img, dominantColor, startX, (startY+endY)/2, endX, endY, idx)
 							colorDown := termbox.Attribute(col)
 
-							r, _ := utf8.DecodeRuneInString(unicode)
+							r, _ := utf8.DecodeRuneInString(blockCode)
 							if commands.Parsed() {
 								termbox.SetCell(x, y, r, colorDown, colorUp)
 							} else {

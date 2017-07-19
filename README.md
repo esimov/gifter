@@ -1,9 +1,11 @@
 <img width="90" alt="Gifter" src="https://cloud.githubusercontent.com/assets/883386/21749779/ef01be0c-d5ae-11e6-90d2-25d775286f60.png"/>
+
 #
 Gifter is a gif renderer running in the terminal. It takes a gif file as input and plays it directly in the terminal window. It's fully customziable by the supported command flags. Gifter is build on top of <a href="https://github.com/nsf/termbox-go">termbox-go</a>.
 <p align="center">
 <img alt="Sample gif" src="https://raw.githubusercontent.com/esimov/gifter/master/capture.gif"/>
 </p>
+
 ### Install
 ```
 go get github.com/esimov/gifter
@@ -41,6 +43,5 @@ Command line arguments:
 ```
 _Note:_ there is a flickering issue playing non transparent background gif images. For this reason you can use the `background=remove` flag, which generates a new gif image with the most dominant color removed (which in most cases is the background color). But for the best visual experience it's advised to use gif files with transparent background. 
 
-## Licence
-
-This experiment is under MIT License.
+## License
+This software is distributed under the MIT license found in the LICENSE file.

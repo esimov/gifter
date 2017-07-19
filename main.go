@@ -162,7 +162,7 @@ func draw(img *gif.GIF) {
 						break loop
 					}
 				case termbox.EventResize :
-					//break loop
+				//break loop
 				}
 			default:
 				wg.Add(1)

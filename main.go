@@ -42,7 +42,7 @@ func main() {
 	commands = *flag.NewFlagSet("commands", flag.ExitOnError)
 	commands.BoolVar(&removeBg, "removeBg", false, "Remove GIF file background color")
 	commands.StringVar(&outputFile, "output", "output.gif", "Create new GIF file with the background color removed")
-	commands.StringVar(&blockCode, "block", "▄", "Select unicode character as cell block")
+	commands.StringVar(&blockCode, "block", "▄", "Used unicode character as cell block")
 	commands.IntVar(&frameRates, "frame", 120, "Frame rates")
 	commands.Uint64Var(&count, "count", math.MaxUint64, "Loop count")
 
@@ -56,7 +56,7 @@ func main() {
 		fmt.Println(`
 Usage of commands:
   -block string
-    	Select unicode character as cell block (default "▄")
+    	Used unicode character as cell block (default "▄")
   -count uint
     	Loop count (default 18446744073709551615)
   -frame int

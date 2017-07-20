@@ -29,17 +29,17 @@ To terminate the gif animation press `<ESC>`, `CTRL-C`, `CTRL-D` or `q` key. You
 Type `gifter --help` for the supported commands:
 
 ```
-Command line arguments:
-	-background string
-		Remove background color from GIF image (default "preserve")
-	-file string
-		Export the new GIF file with the background color removed (default "output.gif")
-	-character string
-		Use character as cell block (default "▄")
-	-delay int
-		Delay between frames (default 120)
-	-loop uint
-		Loop count (default 18446744073709551615)
+Usage of commands:
+  -block string
+    	Select unicode character as cell block (default "▄")
+  -count uint
+    	Loop count (default 18446744073709551615)
+  -frame int
+    	Frame rates (default 120)
+  -output string
+    	Create new GIF file with the background color removed (default "output.gif")
+  -removeBg
+    	Remove GIF file background color
 ```
 _Note:_ there is a flickering issue playing non transparent background gif images. For this reason you can use the `background=remove` flag, which generates a new gif image with the most dominant color removed (which in most cases is the background color). But for the best visual experience it's advised to use gif files with transparent background. 
 

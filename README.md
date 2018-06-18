@@ -30,18 +30,18 @@ Type `gifter --help` for the supported commands:
 
 ```
 Usage of commands:
-  -block string
-    	Select unicode character as cell block (default "▄")
-  -count uint
+  -cell string
+    	Used unicode character as cell block (default "▄")
+  -loop uint
     	Loop count (default 18446744073709551615)
-  -frame int
+  -fps int
     	Frame rates (default 120)
-  -output string
-    	Create new GIF file with the background color removed (default "output.gif")
-  -removeBg
-    	Remove GIF file background color
+  -out string
+    	Create a new GIF file with the background color removed (default "output.gif")
+  -rb
+    	Remove GIF background color
 ```
-_Note:_ there is a flickering issue playing non transparent background gif images. For this reason you can use the `background=remove` flag, which generates a new gif image with the most dominant color removed (which in most cases is the background color). But for the best visual experience it's advised to use gif files with transparent background. 
+_Note:_ there is a flickering issue playing non transparent background gif images. For this reason the `-rb` flag is included, which generates a new gif image with the most dominant color removed (which in most cases is the background color). But for the best visual experience it's advised to use gif files with transparent background. 
 
 ## License
 This software is distributed under the MIT license found in the LICENSE file.

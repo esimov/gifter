@@ -22,9 +22,9 @@ var (
 	wg         sync.WaitGroup
 	gifImg     *GifImg
 	terminal   *Terminal
-	termWidth  int     = Window.Width
-	termHeight int     = Window.Height
-	ratio      float64 = Window.Ratio
+	termWidth  = Window.Width
+	termHeight = Window.Height
+	ratio      = Window.Ratio
 
 	// Flags
 	out   string

@@ -1,9 +1,11 @@
 package main
 
 import (
-	"os"
 	"image/color"
 	"image/gif"
+	"log"
+	"os"
+	"path/filepath"
 )
 
 type GifImg struct {
@@ -16,6 +18,10 @@ func NewGifImg(img *gif.GIF) *GifImg {
 
 // Load image
 func (gifImg *GifImg) Load(filename string) (*gif.GIF, error) {
+	ext := filepath.Ext(filename)
+	if len(ext) < 1 {
+		log.Fatal("Please provide a Gif file")
+	}
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -37,8 +43,8 @@ func (gifImg *GifImg) CellAvgRGB(img *gif.GIF, dominantColor color.RGBA, startX,
 	for x := startX; x < endX; x++ {
 		for y := startY; y < endY; y++ {
 			gf := img.Image[index]
-			r,g,b,_ := gf.At(x,y).RGBA()
-			rd,gd,bd,_ := dominantColor.RGBA()
+			r, g, b, _ := gf.At(x, y).RGBA()
+			rd, gd, bd, _ := dominantColor.RGBA()
 			// remove background color
 			if rd == r && gd == g && bd == b {
 				r, g, b = 0x00, 0x00, 0x00
@@ -70,7 +76,7 @@ func (gifImg *GifImg) GetDominantColor(img *gif.GIF) color.RGBA {
 
 	for x := 0; x < imgWidth; x++ {
 		for y := 0; y < imgHeight; y++ {
-			r,g,b,a := firstFrame.At(x,y).RGBA()
+			r, g, b, a := firstFrame.At(x, y).RGBA()
 			// get the value from the RGBA
 			r /= 0xff
 			g /= 0xff
@@ -79,7 +85,7 @@ func (gifImg *GifImg) GetDominantColor(img *gif.GIF) color.RGBA {
 			pixVal := uint32(r)<<24 | uint32(g)<<16 | uint32(b)<<8 | uint32(a)
 			// Add the pixel color from the color range to the histogram map, which index is the pixel color converted to uint32.
 			// This way we will store all the identical pixels to the same indexed entry.
-			histogram[pixVal] = append(histogram[pixVal], color.RGBA{uint8(r),uint8(g),uint8(b),uint8(a)})
+			histogram[pixVal] = append(histogram[pixVal], color.RGBA{uint8(r), uint8(g), uint8(b), uint8(a)})
 		}
 	}
 
@@ -87,7 +93,7 @@ func (gifImg *GifImg) GetDominantColor(img *gif.GIF) color.RGBA {
 	var dominantColor color.RGBA
 	// Find which uint32 converted color occurs mostly in the color range
 	// We lookup for the length of histogram map indexes
-	for pix, _ := range histogram {
+	for pix := range histogram {
 		colorRange := len(histogram[pix])
 		if uint32(colorRange) > maxVal {
 			maxVal = uint32(colorRange)
@@ -111,9 +117,9 @@ func (gifImg *GifImg) Scale(imgWidth, imgHeight, termWidth, termHeight int, rati
 }
 
 // Set terminal cell's dimension
-func (gifImg *GifImg) CellSize(x, y int, scaleX, scaleY, ratio float64) (int, int, int, int){
-	startX, startY := float64(x) * scaleX, float64(y) * scaleY
-	endX, endY := startX + scaleX, startY + scaleY * ratio
+func (gifImg *GifImg) CellSize(x, y int, scaleX, scaleY, ratio float64) (int, int, int, int) {
+	startX, startY := float64(x)*scaleX, float64(y)*scaleY
+	endX, endY := startX+scaleX, startY+scaleY*ratio
 	return int(startX), int(startY), int(endX), int(endY)
 }
 

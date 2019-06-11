@@ -42,19 +42,13 @@ var (
 	rb    bool
 	delay int
 	count uint64
+
+	fs flag.FlagSet
 )
 
 func init() {
-
-}
-
-func main() {
-	rand.Seed(time.Now().UTC().UnixNano())
-	signalChan := make(chan os.Signal, 2)
-	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
-
 	// Flags
-	fs := flag.NewFlagSet("Commands", flag.ExitOnError)
+	fs = *flag.NewFlagSet("Commands", flag.ExitOnError)
 	fs.BoolVar(&rb, "rb", false, "Remove background color")
 	fs.StringVar(&out, "out", "output.gif", "Create a new GIF file with the dominant (background) color removed")
 	fs.StringVar(&cell, "cell", "▄", "Used unicode character as cell block")
@@ -66,6 +60,12 @@ func main() {
 		fs.PrintDefaults()
 	}
 	fs.Parse(os.Args[2:])
+}
+
+func main() {
+	rand.Seed(time.Now().UTC().UnixNano())
+	signalChan := make(chan os.Signal, 2)
+	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 
 	if len(os.Args) <= 1 || os.Args[1] == "--help" || os.Args[1] == "-h" {
 		fmt.Fprintf(os.Stderr, HelpBanner)

@@ -59,13 +59,6 @@ func init() {
 		fmt.Fprintf(os.Stderr, HelpBanner)
 		fs.PrintDefaults()
 	}
-	fs.Parse(os.Args[2:])
-}
-
-func main() {
-	rand.Seed(time.Now().UTC().UnixNano())
-	signalChan := make(chan os.Signal, 2)
-	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 
 	if len(os.Args) <= 1 || os.Args[1] == "--help" || os.Args[1] == "-h" {
 		fmt.Fprintf(os.Stderr, HelpBanner)
@@ -75,6 +68,14 @@ func main() {
 		fmt.Println("Exit the animation by pressing <ESC> or 'q'.\n")
 		os.Exit(1)
 	}
+	
+	fs.Parse(os.Args[2:])
+}
+
+func main() {
+	rand.Seed(time.Now().UTC().UnixNano())
+	signalChan := make(chan os.Signal, 2)
+	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 
 	if delay <= 0 {
 		delay = 1

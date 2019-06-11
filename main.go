@@ -76,6 +76,10 @@ func main() {
 		os.Exit(1)
 	}
 
+	if delay <= 0 {
+		delay = 1
+	}
+
 	terminal = &Terminal{}
 
 	img := loadGif(os.Args[1])

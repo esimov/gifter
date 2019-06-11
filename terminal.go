@@ -4,21 +4,21 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"strings"
 	"os"
+	"strings"
 )
 
 type winsize struct {
-	Rows 	uint16
-	Cols 	uint16
-	Width 	uint16
-	Height 	uint16
+	Rows   uint16
+	Cols   uint16
+	Width  uint16
+	Height uint16
 }
 
 type Terminal struct {
-	Width	int
-	Height 	int
-	Ratio	float64
+	Width  int
+	Height int
+	Ratio  float64
 }
 
 const defaultRatio float64 = 1.0 // The terminal's default cursor width/height ratio
@@ -36,7 +36,7 @@ func init() {
 }
 
 // Get terminal size
-func getTerminal() (*Terminal) {
+func getTerminal() *Terminal {
 	var whRatio float64
 	ws, err := getWinsize()
 	if err != nil {
@@ -44,12 +44,12 @@ func getTerminal() (*Terminal) {
 	}
 	whRatio = defaultRatio
 	if ws.Width > 0 && ws.Height > 0 {
-		whRatio = float64(ws.Height / ws.Rows) / float64(ws.Width / ws.Cols) * 0.5
+		whRatio = float64(ws.Height/ws.Rows) / float64(ws.Width/ws.Cols) * 0.5
 	}
 	return &Terminal{
-		Width 	: int(ws.Cols),
-		Height 	: int(ws.Rows),
-		Ratio	: whRatio,
+		Width:  int(ws.Cols),
+		Height: int(ws.Rows),
+		Ratio:  whRatio,
 	}
 }
 
@@ -64,7 +64,7 @@ func (terminal *Terminal) Flush() {
 
 	screen.Reset()
 	output.Flush()
-	terminal.MoveCursor(0,0)
+	terminal.MoveCursor(0, 0)
 }
 
 // Move cursor to given position

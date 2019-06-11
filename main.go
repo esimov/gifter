@@ -18,6 +18,16 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
+const HelpBanner = `
+╔═╗╦╔═╗╔╦╗╔═╗╦═╗
+║ ╦║╠╣  ║ ║╣ ╠╦╝
+╚═╝╩╚   ╩ ╚═╝╩╚═
+Run gif files in terminal.
+
+Supported Commands:
+
+`
+
 var (
 	wg         sync.WaitGroup
 	gifImg     *GifImg
@@ -30,48 +40,42 @@ var (
 	out   string
 	cell  string
 	rb    bool
-	fps   int
+	delay int
 	count uint64
-
-	commands flag.FlagSet
 )
+
+func init() {
+
+}
 
 func main() {
 	rand.Seed(time.Now().UTC().UnixNano())
 	signalChan := make(chan os.Signal, 2)
 	signal.Notify(signalChan, os.Interrupt, syscall.SIGTERM)
 
-	commands = *flag.NewFlagSet("commands", flag.ExitOnError)
-	commands.BoolVar(&rb, "rb", false, "Remove background color")
-	commands.StringVar(&out, "out", "output.gif", "Create a new GIF file with the background color removed")
-	commands.StringVar(&cell, "cell", "▄", "Used unicode character as cell block")
-	commands.IntVar(&fps, "fps", 120, "Frame rates")
-	commands.Uint64Var(&count, "loop", math.MaxUint64, "Loop count")
+	// Flags
+	fs := flag.NewFlagSet("Commands", flag.ExitOnError)
+	fs.BoolVar(&rb, "rb", false, "Remove background color")
+	fs.StringVar(&out, "out", "output.gif", "Create a new GIF file with the dominant (background) color removed")
+	fs.StringVar(&cell, "cell", "▄", "Used unicode character as cell block")
+	fs.IntVar(&delay, "delay", 120, "Animation speed (delay between frame rates)")
+	fs.Uint64Var(&count, "loop", math.MaxUint64, "Loop count")
 
-	if len(os.Args) <= 1 {
-		fmt.Println("Please provide a GIF image, or type --help for the supported command line arguments\n")
+	fs.Usage = func() {
+		fmt.Fprintf(os.Stderr, HelpBanner)
+		fs.PrintDefaults()
+	}
+	fs.Parse(os.Args[2:])
+
+	if len(os.Args) <= 1 || os.Args[1] == "--help" || os.Args[1] == "-h" {
+		fmt.Fprintf(os.Stderr, HelpBanner)
+		fs.PrintDefaults()
+
+		fmt.Println("\nPlease provide a GIF file, or type --help for the supported flags.\n")
 		fmt.Println("Exit the animation by pressing <ESC> or 'q'.\n")
 		os.Exit(1)
 	}
 
-	if os.Args[1] == "--help" || os.Args[1] == "-h" {
-		fmt.Println(`
-Usage of commands:
-  -cell string
-    	Used unicode character as cell block (default "▄")
-  -loop uint
-    	Loop count (default 18446744073709551615)
-  -fps int
-    	Frame rates (default 120)
-  -out string
-    	Create a new GIF file with the background color removed (default "output.gif")
-  -rb
-    	Remove GIF background color
-		`)
-		os.Exit(1)
-	}
-
-	commands.Parse(os.Args[2:])
 	terminal = &Terminal{}
 
 	img := loadGif(os.Args[1])
@@ -85,7 +89,7 @@ Usage of commands:
 	defer termbox.Close()
 	termbox.SetOutputMode(termbox.Output256)
 
-	if commands.Parsed() && rb {
+	if rb {
 		dominantColor := gifImg.GetDominantColor(img)
 		for idx := 0; idx < len(img.Image); idx++ {
 			for x := 0; x < img.Config.Width; x++ {
@@ -134,7 +138,7 @@ func draw(img *gif.GIF) {
 	var startX, startY, endX, endY int
 	var loopCount uint64
 
-	ticker := time.Tick(time.Millisecond * time.Duration(fps))
+	ticker := time.Tick(time.Millisecond * time.Duration(delay))
 	imgWidth, imgHeight := img.Config.Width, img.Config.Height
 	scaleX, scaleY := gifImg.Scale(imgWidth, imgHeight, termWidth, termHeight, ratio)
 	dominantColor := gifImg.GetDominantColor(img)
@@ -184,11 +188,7 @@ loop:
 							colorDown := termbox.Attribute(col)
 
 							r, _ := utf8.DecodeRuneInString(cell)
-							if commands.Parsed() {
-								termbox.SetCell(x, y, r, colorDown, colorUp)
-							} else {
-								termbox.SetCell(x, y, '▄', colorDown, colorUp)
-							}
+							termbox.SetCell(x, y, r, colorDown, colorUp)
 						}
 					}
 					termbox.Flush()

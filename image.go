@@ -1,9 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"image/color"
 	"image/gif"
-	"log"
 	"os"
 	"path/filepath"
 )
@@ -20,7 +20,8 @@ func NewGifImg(img *gif.GIF) *GifImg {
 func (gifImg *GifImg) Load(filename string) (*gif.GIF, error) {
 	ext := filepath.Ext(filename)
 	if len(ext) < 1 {
-		log.Fatal("Please provide a Gif file")
+		fmt.Println("Please provide a Gif file")
+		os.Exit(1)
 	}
 	file, err := os.Open(filename)
 	if err != nil {

@@ -68,7 +68,7 @@ func init() {
 		fmt.Println("Exit the animation by pressing <ESC> or 'q'.\n")
 		os.Exit(1)
 	}
-	
+
 	fs.Parse(os.Args[2:])
 }
 

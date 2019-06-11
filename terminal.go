@@ -23,10 +23,11 @@ type Terminal struct {
 
 const defaultRatio float64 = 1.0 // The terminal's default cursor width/height ratio
 
-// Screen buffer
-var screen *bytes.Buffer = new(bytes.Buffer)
-var output *bufio.Writer = bufio.NewWriter(os.Stdout)
-var Window *Terminal = getTerminal()
+var (
+	screen *bytes.Buffer = new(bytes.Buffer)
+	output *bufio.Writer = bufio.NewWriter(os.Stdout)
+	Window *Terminal     = getTerminal()
+)
 
 func init() {
 	// Clear console

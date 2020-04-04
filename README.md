@@ -1,4 +1,4 @@
-<img width="200" alt="Gifter" src="https://user-images.githubusercontent.com/883386/78249048-5bd9d200-74f6-11ea-9030-db6a5ba1fc3c.jpeg"/>
+<h1 align="center"><img alt="Gifter logo" src="https://user-images.githubusercontent.com/883386/78451724-01747900-7690-11ea-9669-8c2489501beb.png"/></h1>
 
 #
 **`Gifter`** is a gif renderer running in terminal. It takes a gif as an input file and plays it directly in the terminal window. It's fully customziable by the supported command flags. **`Gifter`** is build on top of <a href="https://github.com/nsf/termbox-go">termbox-go</a>.

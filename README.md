@@ -7,7 +7,7 @@
 
 ## Install
 ```
-go get -u -v github.com/esimov/gifter
+$ go get -u -v github.com/esimov/gifter
 ```
 > Note: The terminal must have `xterm-256color` mode enabled.
 
@@ -19,7 +19,7 @@ You can run the code by the following command:
 But the more elegant way is to generate the binary file using `go install`. After this you can run the code as:
 
 ```
-gifter <gif file>
+$ gifter <gif file>
 ```
 
 To finish the gif animation press `<ESC>`, `CTRL-C`, `CTRL-D` or `q` key. You can even set up the number of iterations the gif file should run with the `-loop` flag. The animation will stop after reaching the provided iteration number.

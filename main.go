@@ -19,15 +19,9 @@ import (
 )
 
 const HelpBanner = `
+Render gif files in terminal.
 
-██████╗ ██╗███████╗████████╗███████╗██████╗
-██╔════╝ ██║██╔════╝╚══██╔══╝██╔════╝██╔══██╗
-██║  ███╗██║█████╗     ██║   █████╗  ██████╔╝
-██║   ██║██║██╔══╝     ██║   ██╔══╝  ██╔══██╗
-╚██████╔╝██║██║        ██║   ███████╗██║  ██║
- ╚═════╝ ╚═╝╚═╝        ╚═╝   ╚══════╝╚═╝  ╚═╝
-
-Run gif files in terminal.
+Usage: gifter <gif file>
 
 Supported Commands:
 
@@ -69,9 +63,8 @@ func init() {
 		fmt.Fprintf(os.Stderr, HelpBanner)
 		fs.PrintDefaults()
 
-		fmt.Println("\nPlease provide a GIF file, or type --help for the supported flags.\n")
 		fmt.Println("Exit the animation by pressing <ESC> or 'q'.\n")
-		os.Exit(1)
+		os.Exit(0)
 	}
 
 	fs.Parse(os.Args[2:])
